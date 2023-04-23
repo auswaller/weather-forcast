@@ -3,17 +3,26 @@ let locationInputEl = document.getElementById("location-input");
 let locationButtonEl = document.getElementById("location-button");
 
 const apiKey = "8e59e3c1090d9dbee1abe33e67416e56";
-let zipCode = "06248";
+let zipCode = "";
+let city = "";
+let state = "";
 
 locationButtonEl.addEventListener("click", function(event){
     event.preventDefault();
-    zipCode = locationInputEl.value;
-    console.log(zipCode);
+    let loc = locationInputEl.value;
+    if(/^\d+$/.test(loc)){
+        zipCode = locationInputEl.value;
+        console.log("Entered: " + zipCode);
+    }
+    else{
+        let strArr = loc.split(",");
+        city = strArr[0].trim();
+        state = strArr[1].trim();
+        console.log("Entered: " + city + " , " + state);
+    }
 
     getLocation();
 });
-
-//getForecast(getLocation());
 
 function getLocation(){
     fetch("http://api.openweathermap.org/geo/1.0/zip?zip=" + zipCode + "&appid=" + apiKey)
