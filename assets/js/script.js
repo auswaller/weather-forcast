@@ -87,7 +87,7 @@ function getLocationWithZip(zip){
 
 function getForecast(forLoc){
     console.log(forLoc);
-    fetch("http://api.openweathermap.org/data/2.5/forecast?lat=" + forLoc.lat + "&lon=" + forLoc.lon + "&appid=" + apiKey + "&units=imperial")
+    fetch("https://api.openweathermap.org/data/2.5/forecast?lat=" + forLoc.lat + "&lon=" + forLoc.lon + "&appid=" + apiKey + "&units=imperial")
     .then(function (response){
         console.log("----- Getting Forecast -----");
         console.log(response);
