@@ -3,10 +3,16 @@ let locationInputEl = document.getElementById("location-input");
 let locationButtonEl = document.getElementById("location-button");
 
 const apiKey = "8e59e3c1090d9dbee1abe33e67416e56";
-let zipCode = "";
-let city = "";
-let state = "";
-var retrievedLocation = {};
+let zipCode;
+let strArr = [];
+let searchHistory = {
+    city:[],
+    state:[],
+    lat:[],
+    lon:[]
+};
+
+init();
 
 locationButtonEl.addEventListener("click", function(event){
     event.preventDefault();
@@ -17,24 +23,25 @@ locationButtonEl.addEventListener("click", function(event){
         console.log("Entered: " + zipCode);
     }
     else{
-        let strArr = loc.split(",");
-        city = strArr[0].trim();
-        state = strArr[1].trim();
-        console.log("Entered: " + city + " , " + state);
+        strArr = loc.split(",");
+        console.log("Entered: " + strArr[0] + " , " + strArr[1]);
     }
 
     if(zipCode){
-        getLocationWithZip();
+        getLocationWithZip(zipCode);
     }
-    else if(city && state){
-        getLocationWithCS();
+    else if(strArr[0] && strArr[1]){
+        getLocationWithCS(strArr[0], strArr[1]);
     }
     else{
         console.log("Invalid location entered");
     }
+
+    strArr = [];
+    zipCode = "";
 });
 
-function getLocationWithCS(){
+function getLocationWithCS(city, state){
     fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + city + "," + state + ",us&appid=" + apiKey)
     .then(function (response){
         console.log("----- Getting Location -----");
@@ -83,4 +90,27 @@ function getForecast(forLoc){
 
 function buildForecastDisplay(forecast){
 
+}
+
+function init(){
+    loadFromLocalStorage();
+    buildSearch();
+}
+
+function buildSearch(){
+    for(let i = 0; i < searchHistory.city.length; i++){
+        
+    }
+}
+
+function saveToLocalStorage(){
+    localStorage.setItem("search", JSON.stringify(searchHistory));
+}
+
+function loadFromLocalStorage(){
+    let storedSearch = JSON.parse(localStorage.getItem("search"));
+
+    if(storedSearch !== null){
+        searchHistory = storedSearch;
+    }
 }
