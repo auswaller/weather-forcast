@@ -21,20 +21,12 @@ locationButtonEl.addEventListener("click", function(event){
     if(/^\d+$/.test(loc)){
         zipCode = locationInputEl.value;
         console.log("Entered: " + zipCode);
+        getLocationWithZip(zipCode)
     }
     else{
         strArr = loc.split(",");
         console.log("Entered: " + strArr[0] + " , " + strArr[1]);
-    }
-
-    if(zipCode){
-        getLocationWithZip(zipCode);
-    }
-    else if(strArr[0] && strArr[1]){
-        getLocationWithCS(strArr[0], strArr[1]);
-    }
-    else{
-        console.log("Invalid location entered");
+        getLocationWithCS(strArr[0], strArr[1])
     }
 
     strArr.length = 0;
@@ -43,7 +35,9 @@ locationButtonEl.addEventListener("click", function(event){
 
 historyButtonsEl.addEventListener("click", function(event){
     event.preventDefault();
-
+    if(event.target.tagName !== "BUTTON"){
+        return;
+    }
     let buttonInfo = {
         lat: event.target.getAttribute("data-lat"),
         lon: event.target.getAttribute("data-lon")
@@ -100,7 +94,7 @@ function getForecast(forLoc){
         return response.json();
     }).then(function (data){
         console.log(data);
-        //buildForecastDisplay(data);
+        buildForecastDisplay(data);
     });
 }
 
@@ -118,6 +112,10 @@ function getCurrent(forLoc){
     });
 }
 
+function buildForecastDisplay(){
+
+}
+
 function buildCurrentDisplay(current){
     forecastEl.innerHTML = "";
     let newLocationEl = document.createElement("h4");
@@ -127,7 +125,7 @@ function buildCurrentDisplay(current){
     let iconURL = "https://openweathermap.org/img/wn/" + current.weather[0].icon +"@2x.png";
 
     newImage.src = iconURL;
-    newImage.setAttribute("height", "35px");
+    newImage.setAttribute("height", "30px");
     newLocationEl.innerHTML = current.name + " (" + dayjs().format("MM-DD-YYYY") + ") ";
     newCurrentEl.innerHTML = "<br/>Temp: " + current.main.temp + "℉" + "<br/><br/>Wind: " + current.wind.speed + " MPH" + "<br/><br/>Humidity: " + current.main.humidity + " %";
 
