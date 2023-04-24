@@ -100,7 +100,7 @@ function getForecast(forLoc){
 
 function getCurrent(forLoc){
     console.log(forLoc);
-    fetch("http://api.openweathermap.org/data/2.5/weather?lat=" + forLoc.lat + "&lon=" + forLoc.lon + "&appid=" + apiKey + "&units=imperial")
+    fetch("https://api.openweathermap.org/data/2.5/weather?lat=" + forLoc.lat + "&lon=" + forLoc.lon + "&appid=" + apiKey + "&units=imperial")
     .then(function (response){
         console.log("----- Getting Current -----");
         console.log(response);
