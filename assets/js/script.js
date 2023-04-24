@@ -1,7 +1,7 @@
-let formEl = document.getElementById("location-form");
 let locationInputEl = document.getElementById("location-input");
 let locationButtonEl = document.getElementById("location-button");
 let historyButtonsEl = document.getElementById("history-buttons");
+let forecastEl = document.getElementById("forecast");
 
 const apiKey = "8e59e3c1090d9dbee1abe33e67416e56";
 let zipCode;
@@ -49,6 +49,7 @@ historyButtonsEl.addEventListener("click", function(event){
         lon: event.target.getAttribute("data-lon")
     }
     console.log(buttonInfo);
+    getCurrent(buttonInfo);
     getForecast(buttonInfo);
 });
 
@@ -64,6 +65,7 @@ function getLocationWithCS(city, state){
     }).then(function (data){
         console.log(data);
         setHistory(data[0]);
+        getCurrent(data[0]);
         getForecast(data[0]);
     }).catch(function (error){
         console.log(error);
@@ -82,6 +84,7 @@ function getLocationWithZip(){
      }).then(function (data){
         console.log(data);
         setHistory(data);
+        getCurrent(data);
         getForecast(data);
      }).catch(function (error){
         console.log(error);
@@ -90,19 +93,46 @@ function getLocationWithZip(){
 
 function getForecast(forLoc){
     console.log(forLoc);
-    fetch("http://api.openweathermap.org/data/2.5/forecast?lat=" + forLoc.lat + "&lon=" + forLoc.lon + "&appid=" + apiKey)
+    fetch("http://api.openweathermap.org/data/2.5/forecast?lat=" + forLoc.lat + "&lon=" + forLoc.lon + "&appid=" + apiKey + "&units=imperial")
     .then(function (response){
         console.log("----- Getting Forecast -----");
         console.log(response);
         return response.json();
     }).then(function (data){
         console.log(data);
-        buildForecastDisplay(data);
+        //buildForecastDisplay(data);
     });
 }
 
-function buildForecastDisplay(forecast){
+function getCurrent(forLoc){
+    console.log(forLoc);
+    fetch("http://api.openweathermap.org/data/2.5/weather?lat=" + forLoc.lat + "&lon=" + forLoc.lon + "&appid=" + apiKey + "&units=imperial")
+    .then(function (response){
+        console.log("----- Getting Current -----");
+        console.log(response);
+        return response.json();
+    }).then(function (data){
+        console.log(data);
+        buildCurrentDisplay(data);
 
+    });
+}
+
+function buildCurrentDisplay(current){
+    forecastEl.innerHTML = "";
+    let newLocationEl = document.createElement("h4");
+    let newCurrentEl = document.createElement("p");
+    let newWeatherIcon = document.createElement("span");
+    let iconURL = "https://openweathermap.org/img/wn/" + current.weather[0].icon +"@2x.png";
+    console.log(iconURL);
+
+    newWeatherIcon.style.background = "url(" + iconURL + ")";
+    newLocationEl.innerHTML = current.name + " " + dayjs().format("MM-DD-YYYY ");
+    newCurrentEl.innerHTML = "<br/><br/>Temp: " + current.main.temp + "℉" + "<br/><br/>Wind: " + current.wind.speed + " MPH" + "<br/><br/>Humidity: " + current.main.humidity + " %";
+
+    newLocationEl.appendChild(newWeatherIcon);
+    forecastEl.appendChild(newLocationEl);
+    forecastEl.appendChild(newCurrentEl);
 }
 
 function init(){
@@ -121,6 +151,7 @@ function buildSearch(){
         newHistoryButton.setAttribute("class", "btn btn-outline-success history-btn");
         newHistoryButton.setAttribute("data-lat", searchHistory.lat[i]);
         newHistoryButton.setAttribute("data-lon", searchHistory.lon[i]);
+        newHistoryButton.setAttribute("type", "button");
 
         newHistoryButtonList.appendChild(newHistoryButton)
         historyButtonsEl.appendChild(newHistoryButtonList);
