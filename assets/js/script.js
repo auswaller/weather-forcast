@@ -48,7 +48,7 @@ historyButtonsEl.addEventListener("click", function(event){
 });
 
 function getLocationWithCS(city, state){
-    fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + city + "," + state + ",us&appid=" + apiKey)
+    fetch("https://api.openweathermap.org/geo/1.0/direct?q=" + city + "," + state + ",us&appid=" + apiKey)
     .then(function (response){
         console.log("----- Getting Location -----");
         console.log(response);
@@ -67,7 +67,7 @@ function getLocationWithCS(city, state){
 }
 
 function getLocationWithZip(zip){
-    fetch("http://api.openweathermap.org/geo/1.0/zip?zip=" + zip + "&appid=" + apiKey)
+    fetch("https://api.openweathermap.org/geo/1.0/zip?zip=" + zip + "&appid=" + apiKey)
     .then(function (response){
         console.log("----- Getting Location -----");
         console.log(response);
