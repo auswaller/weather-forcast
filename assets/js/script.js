@@ -1,13 +1,13 @@
 let formEl = document.getElementById("location-form");
 let locationInputEl = document.getElementById("location-input");
 let locationButtonEl = document.getElementById("location-button");
+let historyButtonsEl = document.getElementById("history-buttons");
 
 const apiKey = "8e59e3c1090d9dbee1abe33e67416e56";
 let zipCode;
 let strArr = [];
 let searchHistory = {
-    city:[],
-    state:[],
+    name:[],
     lat:[],
     lon:[]
 };
@@ -37,8 +37,19 @@ locationButtonEl.addEventListener("click", function(event){
         console.log("Invalid location entered");
     }
 
-    strArr = [];
+    strArr.length = 0;
     zipCode = "";
+});
+
+historyButtonsEl.addEventListener("click", function(event){
+    event.preventDefault();
+
+    let buttonInfo = {
+        lat: event.target.getAttribute("data-lat"),
+        lon: event.target.getAttribute("data-lon")
+    }
+    console.log(buttonInfo);
+    getForecast(buttonInfo);
 });
 
 function getLocationWithCS(city, state){
@@ -52,6 +63,7 @@ function getLocationWithCS(city, state){
         throw new Error("Something went wrong");
     }).then(function (data){
         console.log(data);
+        setHistory(data[0]);
         getForecast(data[0]);
     }).catch(function (error){
         console.log(error);
@@ -69,6 +81,7 @@ function getLocationWithZip(){
         throw new Error("Something went wrong");
      }).then(function (data){
         console.log(data);
+        setHistory(data);
         getForecast(data);
      }).catch(function (error){
         console.log(error);
@@ -98,8 +111,19 @@ function init(){
 }
 
 function buildSearch(){
-    for(let i = 0; i < searchHistory.city.length; i++){
-        
+    historyButtonsEl.innerHTML = "";
+
+    for(let i = 0; i < searchHistory.name.length; i++){
+        let newHistoryButtonList = document.createElement("li");
+        let newHistoryButton = document.createElement("button");
+
+        newHistoryButton.textContent = searchHistory.name[i];
+        newHistoryButton.setAttribute("class", "btn btn-outline-success history-btn");
+        newHistoryButton.setAttribute("data-lat", searchHistory.lat[i]);
+        newHistoryButton.setAttribute("data-lon", searchHistory.lon[i]);
+
+        newHistoryButtonList.appendChild(newHistoryButton)
+        historyButtonsEl.appendChild(newHistoryButtonList);
     }
 }
 
@@ -113,4 +137,19 @@ function loadFromLocalStorage(){
     if(storedSearch !== null){
         searchHistory = storedSearch;
     }
+}
+
+function setHistory(loc){
+    searchHistory.name.unshift(loc.name); 
+    searchHistory.lat.unshift(loc.lat);
+    searchHistory.lon.unshift(loc.lon);
+
+    if(searchHistory.name.length > 10){
+        searchHistory.name.length = 10;
+        searchHistory.lat.length = 10;
+        searchHistory.lon.length = 10;
+    }
+
+    saveToLocalStorage(searchHistory);
+    buildSearch();
 }
