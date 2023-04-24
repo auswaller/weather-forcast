@@ -66,8 +66,8 @@ function getLocationWithCS(city, state){
     });
 }
 
-function getLocationWithZip(){
-    fetch("http://api.openweathermap.org/geo/1.0/zip?zip=" + zipCode + "&appid=" + apiKey)
+function getLocationWithZip(zip){
+    fetch("http://api.openweathermap.org/geo/1.0/zip?zip=" + zip + "&appid=" + apiKey)
     .then(function (response){
         console.log("----- Getting Location -----");
         console.log(response);
@@ -108,12 +108,34 @@ function getCurrent(forLoc){
     }).then(function (data){
         console.log(data);
         buildCurrentDisplay(data);
-
     });
 }
 
-function buildForecastDisplay(){
+function buildForecastDisplay(forecast){
+    let n = 1;
+    for(let i = 0; i < forecast.list.length; i++){
+        console.log(forecast.list[i].dt_txt);
+        if(forecast.list[i].dt_txt.search("12:00:00") !== -1){
+            let fiveForecastEl = document.getElementById("forcast-card-" + n);
+            let newDateEl = document.createElement("h4");
+            let newForecastEl = document.createElement("p");
+            let newImage = document.createElement("img");
 
+            let iconURL = "https://openweathermap.org/img/wn/" + forecast.list[i].weather[0].icon +"@2x.png";
+
+            fiveForecastEl.innerHTML = "";
+
+            newImage.src = iconURL;
+            newImage.setAttribute("height", "30px");
+            newDateEl.innerHTML = "(" + dayjs.unix(forecast.list[i].dt).format("MM-DD-YYYY") + ") ";
+            newForecastEl.innerHTML = "<br/>Temp: " + forecast.list[i].main.temp + "℉" + "<br/><br/>Wind: " + forecast.list[i].wind.speed + " MPH" + "<br/><br/>Humidity: " + forecast.list[i].main.humidity + " %";
+
+            newDateEl.appendChild(newImage);
+            fiveForecastEl.appendChild(newDateEl);
+            fiveForecastEl.appendChild(newForecastEl);
+            n++;
+        }
+    }
 }
 
 function buildCurrentDisplay(current){
