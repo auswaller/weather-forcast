@@ -15,7 +15,7 @@
   </head>
 
   <body>
-    <nav class="navbar bg-light">
+    <nav class="navbar bg-light mb-2">
       <div class="container-fluid">
         <form class="d-flex" role="search">
           <input id="location-input" class="form-control me-2" type="search" placeholder="City, State OR Zip Code" aria-label="location-button">
@@ -26,14 +26,33 @@
     </nav>
 
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-4">
-          <ul id="history-buttons">
-  
-          </ul>
+      <div class="row row-cols-2">
+        <div class="col-3">
+          <div class="card">
+            <div class="card-header">
+              Search History
+            </div>
+            <ul id="history-buttons" class="list-group list-group-flush">  
+            </ul>
+          </div>
         </div>
-        <div id="forecast" class="col-8">
-            
+        <div class="row row-cols-1 w-75">
+          <div class="col h-50">
+            <div class="card">
+              <h5 class="card-header">Current Weather</h5>
+              <div id="forecast" class="card-body">
+                
+              </div>
+            </div>
+          </div>
+          <div class="col h-50">
+            <div class="card">
+              <h5 class="card-header">5-Day Forecast</h5>
+              <div class="card-body">
+                
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

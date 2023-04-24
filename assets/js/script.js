@@ -122,15 +122,16 @@ function buildCurrentDisplay(current){
     forecastEl.innerHTML = "";
     let newLocationEl = document.createElement("h4");
     let newCurrentEl = document.createElement("p");
-    let newWeatherIcon = document.createElement("span");
+    let newImage = document.createElement("img");
+
     let iconURL = "https://openweathermap.org/img/wn/" + current.weather[0].icon +"@2x.png";
-    console.log(iconURL);
 
-    newWeatherIcon.style.background = "url(" + iconURL + ")";
-    newLocationEl.innerHTML = current.name + " " + dayjs().format("MM-DD-YYYY ");
-    newCurrentEl.innerHTML = "<br/><br/>Temp: " + current.main.temp + "℉" + "<br/><br/>Wind: " + current.wind.speed + " MPH" + "<br/><br/>Humidity: " + current.main.humidity + " %";
+    newImage.src = iconURL;
+    newImage.setAttribute("height", "35px");
+    newLocationEl.innerHTML = current.name + " (" + dayjs().format("MM-DD-YYYY") + ") ";
+    newCurrentEl.innerHTML = "<br/>Temp: " + current.main.temp + "℉" + "<br/><br/>Wind: " + current.wind.speed + " MPH" + "<br/><br/>Humidity: " + current.main.humidity + " %";
 
-    newLocationEl.appendChild(newWeatherIcon);
+    newLocationEl.appendChild(newImage);
     forecastEl.appendChild(newLocationEl);
     forecastEl.appendChild(newCurrentEl);
 }
@@ -147,8 +148,10 @@ function buildSearch(){
         let newHistoryButtonList = document.createElement("li");
         let newHistoryButton = document.createElement("button");
 
+        newHistoryButtonList.setAttribute("class", "list-group-item");
+
         newHistoryButton.textContent = searchHistory.name[i];
-        newHistoryButton.setAttribute("class", "btn btn-outline-success history-btn");
+        newHistoryButton.setAttribute("class", "btn btn-outline-success history-btn d-grid gap-2 col-12 mx-auto");
         newHistoryButton.setAttribute("data-lat", searchHistory.lat[i]);
         newHistoryButton.setAttribute("data-lon", searchHistory.lon[i]);
         newHistoryButton.setAttribute("type", "button");
