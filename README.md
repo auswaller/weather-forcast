@@ -6,7 +6,7 @@ This is a weather forecast website that allows you to search for a location with
 
 ## Screenshot
 
-![Screenshot of the deployed weather forecast website](./Assets/images/Screenshot.png)
+![Screenshot of the deployed weather forecast website](./assets/images/Screenshot.png)
 
 ## Link
 
