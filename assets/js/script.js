@@ -114,7 +114,6 @@ function getCurrent(forLoc){
 function buildForecastDisplay(forecast){
     let n = 1;
     for(let i = 0; i < forecast.list.length; i++){
-        console.log(forecast.list[i].dt_txt);
         if(forecast.list[i].dt_txt.search("12:00:00") !== -1){
             let fiveForecastEl = document.getElementById("forcast-card-" + n);
             let newDateEl = document.createElement("h4");
@@ -159,6 +158,7 @@ function buildCurrentDisplay(current){
 function init(){
     loadFromLocalStorage();
     buildSearch();
+    getLocationWithCS("hartford", "ct");
 }
 
 function buildSearch(){
@@ -171,7 +171,7 @@ function buildSearch(){
         newHistoryButtonList.setAttribute("class", "list-group-item");
 
         newHistoryButton.textContent = searchHistory.name[i];
-        newHistoryButton.setAttribute("class", "btn btn-outline-success history-btn d-grid gap-2 col-12 mx-auto");
+        newHistoryButton.setAttribute("class", "btn btn-outline-secondary history-btn d-grid gap-2 col-12 mx-auto");
         newHistoryButton.setAttribute("data-lat", searchHistory.lat[i]);
         newHistoryButton.setAttribute("data-lon", searchHistory.lon[i]);
         newHistoryButton.setAttribute("type", "button");
